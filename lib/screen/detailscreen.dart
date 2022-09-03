@@ -1,22 +1,30 @@
+import 'dart:ffi';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:taskapp/newscreen.dart';
+import 'package:taskapp/screen/newscreen.dart';
 import 'package:taskapp/provider.dart';
 
-class Detailscreen extends StatelessWidget {
-  static const routeName = '\detailscreen';
+class Detailscreen extends StatefulWidget {
+  static const routeName = '/detailscreen';
 
   @override
-  Widget build(BuildContext context) {
+  State<Detailscreen> createState() => _DetailscreenState(); 
+}
+
+class _DetailscreenState extends State<Detailscreen> {
+    
+ 
+
+  @override
+  Widget build(BuildContext context) {                                                 
     final pro = Provider.of<Productdetails>(context);
     final proData = pro.items;
    
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.deepPurple,
-          title: Center(
+          title:const Center(
               child: Text(
             'YOUR POSTS',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
@@ -26,25 +34,25 @@ class Detailscreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pushNamed(Newscreen.routeName);
                 },
-                icon: Icon(Icons.add))
-          ],
-        ),
-        body: pro.items.isEmpty?Center(child: Text("Add Products"),):
+                icon:const Icon(Icons.add))
+          ],        ),
+        body: pro.items.isEmpty?const Center(child: Text("Add Products"),):
         Column(
           children: [
             Expanded(
+              
               child: ListView.builder(itemBuilder: (ctx,i){
                 return  Container(
-              padding: EdgeInsets.all(20),
+              padding:const EdgeInsets.all(20),
                   child: Stack(
-                    alignment: Alignment.bottomCenter,
+                    alignment: Alignment.bottomCenter,              
                     children: [
                        Image.file(
                   File(pro.items[i].imagedir!),
                   fit: BoxFit.cover,
                 ),
                       Container(
-                        decoration: BoxDecoration(
+                        decoration:const BoxDecoration(
                          // borderRadius: BorderRadius.circular(10),
                           color: Colors.white
                         ),
@@ -64,9 +72,31 @@ class Detailscreen extends StatelessWidget {
                                 IconButton(onPressed: (){
                                Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Newscreen(pro.items[i])));
                                 }, icon: Icon(Icons.edit)),
-                                 IconButton(onPressed: (){
-                                  pro.deleteprod(i);
-                                 }, icon: Icon(Icons.delete))
+                                 IconButton(
+                                  onPressed:(){
+                                    
+    showDialog(context: context,
+     builder:(ctx){
+      return AlertDialog(
+        content:const Text('are you sure ?') ,
+        actions: [
+          MaterialButton(
+            onPressed: (){
+              Navigator.of(context).pop();
+            },
+          child: const Text('No'),),
+          MaterialButton(
+            onPressed: (){
+            pro.deleteprod(i);
+            Navigator.of(context).pop();
+            },
+          child:const Text('Yes'),)
+        ],
+      );
+     } );
+  },
+              
+                                  icon: Icon(Icons.delete))
                               ],
                             ),
             

@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:taskapp/detailscreen.dart';
+import 'package:flutter/services.dart';
+import 'package:taskapp/screen/detailscreen.dart';
+import 'package:taskapp/screen/newscreen.dart';
 
 
 class Login extends StatefulWidget {
@@ -9,12 +11,14 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String _email='';
-  String _password='';
+  String? _email;
+  String? _password;
 GlobalKey<FormState> formkey=GlobalKey();
   onLogin(){
     if(formkey.currentState!.validate()){
- Navigator.of(context).pushNamed(Detailscreen.routeName);
+ Navigator.of(context).pushReplacement(MaterialPageRoute(builder: ((context) {
+  return Detailscreen();
+ })));
     }else{
 
     }
@@ -45,7 +49,7 @@ GlobalKey<FormState> formkey=GlobalKey();
                 },
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.email_outlined),
+                  prefixIcon:const Icon(Icons.email_outlined),
                   hintText: 'Your Email',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(22.0)),
@@ -60,8 +64,11 @@ GlobalKey<FormState> formkey=GlobalKey();
               ),
               TextFormField(
                 obscureText: true,
+                inputFormatters: [
+                  FilteringTextInputFormatter.deny(' '),
+                ],
                 decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.lock_outline),
+                    prefixIcon:const Icon(Icons.lock_outline),
                     hintText: 'Password',
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(22.0))),
@@ -85,7 +92,7 @@ GlobalKey<FormState> formkey=GlobalKey();
                   color: Colors.deepPurple,
                   textColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(32.0)),
+                      borderRadius: BorderRadius.circular(32.0)),
                   onPressed: () {
                   onLogin();
                   },
